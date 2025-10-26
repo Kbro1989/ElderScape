@@ -11,20 +11,41 @@ export default {
 
       let description = '';
       if (type === 'png') {
-        const v = await env.AI.run('@cf/llava-1.5-7b-hf', {
-          image: { base64 },
-          prompt: `Describe RuneScape model ${modelId} in detail.`
+        // Dynamic routing via Gateway (vision to LLaVA)
+        const gatewayRes = await fetch('https://gateway.ai.cloudflare.com/v1/6872653edcee9c791787c1b783173793/pick-of-gods/dynamic/ElderScapeRoute', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer TU0ihCMTL4NVoVbGz-fw-Vbrf65HD8s_6vy7hAkL',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            route: 'vision', // Route to LLaVA
+            image: { base64 },
+            prompt: `Describe RuneScape model ${modelId} in detail.`
+          })
         });
-        description = v.response;
+        const v = await gatewayRes.json();
+        description = v.result?.response || v.response || 'Description error';
       }
 
       const wiki = await getWiki(modelId, env);
-      const lore = await env.AI.run('@cf/hermes-2-pro-mistral-7b', {
-        prompt: `Write RuneScape‑style lore for model ${modelId}: ${description}. Wiki info: ${wiki}`,
-        max_tokens: 120
+      // Dynamic routing for lore (to Hermes-Mistral)
+      const loreRes = await fetch('https://gateway.ai.cloudflare.com/v1/6872653edcee9c791787c1b783173793/pick-of-gods/dynamic/ElderScapeRoute', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer TU0ihCMTL4NVoVbGz-fw-Vbrf65HD8s_6vy7hAkL',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          route: 'lore', // Route to Hermes-Mistral
+          prompt: `Write RuneScape‑style lore for model ${modelId}: ${description}. Wiki info: ${wiki}`,
+          max_tokens: 120
+        })
       });
+      const lore = await loreRes.json();
+      const loreText = lore.result?.response || lore.response || 'Lore error';
 
-      const data = { modelId, description, lore: lore.response, wiki, timestamp: Date.now() };
+      const data = { modelId, description, lore: loreText, wiki, timestamp: Date.now() };
       await env.ELDERSCAPE_KV.put(`model:${modelId}`, JSON.stringify(data), { expirationTtl: 604800 });
       return Response.json(data);
     }
