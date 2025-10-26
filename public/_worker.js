@@ -11,7 +11,7 @@ export default {
 
       let description = '';
       if (type === 'png') {
-        const v = await env.AI.run('@cf/llama-3.2-11b-vision-instruct', {
+        const v = await env.AI.run('@cf/llava-1.5-7b-hf', {
           image: { base64 },
           prompt: `Describe RuneScape model ${modelId} in detail.`
         });
@@ -19,7 +19,7 @@ export default {
       }
 
       const wiki = await getWiki(modelId, env);
-      const lore = await env.AI.run('@cf/llama-3.1-8b-instruct', {
+      const lore = await env.AI.run('@cf/hermes-2-pro-mistral-7b', {
         prompt: `Write RuneScape‑style lore for model ${modelId}: ${description}. Wiki info: ${wiki}`,
         max_tokens: 120
       });
