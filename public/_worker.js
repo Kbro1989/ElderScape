@@ -11,37 +11,29 @@ export default {
 
       let description = '';
       if (type === 'png') {
-        // Vision via Gateway (route to LLaVA)
-        const gatewayRes = await fetch('https://gateway.ai.cloudflare.com/v1/6872653edcee9c791787c1b783173793/pick-of-gods/workers-ai/@cf/llava-1.5-7b-hf', {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer TU0ihCMTL4NVoVbGz-fw-Vbrf65HD8s_6vy7hAkL',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            image: { base64 },
-            prompt: `Describe RuneScape model ${modelId} in detail.`
-          })
+        // Cloudflare AI for vision (free tier)
+        const v = await env.AI.run('@cf/llava-1.5-7b-hf', {
+          image: { base64 },
+          prompt: `Describe RuneScape model ${modelId} in detail.`
         });
-        const v = await gatewayRes.json();
-        description = v.result?.response || v.response || 'Description error';
+        description = v.response;
       }
 
       const wiki = await getWiki(modelId, env);
-      // Lore via Gateway (route to Hermes-Mistral)
-      const loreRes = await fetch('https://gateway.ai.cloudflare.com/v1/6872653edcee9c791787c1b783173793/pick-of-gods/workers-ai/@cf/hermes-2-pro-mistral-7b', {
+      // HF for lore (custom model)
+      const loreRes = await fetch('https://api-inference.huggingface.co/models/NousResearch/Nous-Hermes-2-Mistral-7B-DPO', {
         method: 'POST',
         headers: {
-          'Authorization': 'Bearer TU0ihCMTL4NVoVbGz-fw-Vbrf65HD8s_6vy7hAkL',
+          'Authorization': 'Bearer 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',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          prompt: `Write RuneScape‑style lore for model ${modelId}: ${description}. Wiki info: ${wiki}`,
-          max_tokens: 120
+          inputs: `Write RuneScape-style lore for model ${modelId}: ${description}. Wiki: ${wiki}`,
+          parameters: { max_length: 120, temperature: 0.7 }
         })
       });
       const lore = await loreRes.json();
-      const loreText = lore.result?.response || lore.response || 'Lore error';
+      const loreText = lore[0]?.generated_text || 'Lore error';
 
       const data = { modelId, description, lore: loreText, wiki, timestamp: Date.now() };
       await env.ELDERSCAPE_KV.put(`model:${modelId}`, JSON.stringify(data), { expirationTtl: 604800 });
