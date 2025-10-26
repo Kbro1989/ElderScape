@@ -1,32 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ElderScape | RuneScape 3D Viewer</title>
+<head profile="http://a9.com/-/spec/opensearch/1.1/">
+	<base href="/" />
+	<title>RuneApps Cache Tools – ElderScape Edition</title>
+	<link rel="search" href="/search_pp.xml" type="application/opensearchdescription+xml" title="Runeapps PlayerProfile" />
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+	<meta property='og:image' content='https://runeapps.org/contentimgs/modelviewer/thumbnail.png'/>
+	<meta property='og:title' content='RuneApps Cache Tools – ElderScape'>
+	<meta property='og:description' content='View RuneScape models with AI lore generation'>
+	<meta property='og:site_name' content='ElderScape Model Viewer'>
+	<meta property='og:type' content='website' />
+	<meta name='twitter:site' content='@SkillbertII' />
+	<meta name='twitter:creator' content='@SkillbertII' />
+	<link rel='stylesheet' href='/apps/cachetools/assets/index.css'/>
+	<meta name="google-site-verification" content="QKYaPWXiQSTuN8tdGWJnYd3wQzqqt6CN3BPyoAHzaAk" />
+	<link rel="stylesheet" type="text/css" href="/apps/homepage/runeappslib.css" />
+	<link rel="stylesheet" type="text/css" href="/apps/homepage/contentstyle.css" />
+	<link rel="stylesheet" type="text/css" href="/apps/homepage/style.css" />
+	<link rel="stylesheet" type="text/css" href="/apps/homepage/darkmode.css" />
 
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{font-family:-apple-system,system-ui,sans-serif;background:#0a0a0a;color:#d9d9d9}
-    #loading{position:fixed;inset:0;background:#0a0a0a;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;transition:opacity .3s}
-    #loading.hide{opacity:0;pointer-events:none}
-    .logo{width:100px;margin-bottom:1rem}
-    .spinner{width:32px;height:32px;position:relative}
-    .spinner div{position:absolute;width:100%;height:100%;border:3px solid #92979b;border-radius:50%;border-color:#92979b transparent transparent transparent;animation:s 2.5s cubic-bezier(.5,0,.5,1) infinite}
-    .spinner div:nth-child(1){animation-delay:-.45s}
-    .spinner div:nth-child(2){animation-delay:-.3s}
-    .spinner div:nth-child(3){animation-delay:-.15s}
-    @keyframes s{to{transform:rotate(360deg)}}
-    #app{padding:2rem;text-align:center;max-width:800px;margin:auto}
-    canvas{width:100%;max-width:512px;border:1px solid #444;border-radius:8px;background:#111}
-    button{background:#F78100;color:#fff;border:none;padding:12px 24px;font-size:1rem;border-radius:6px;cursor:pointer;margin:1rem}
-    button:hover{background:#e06a00}
-    .status{margin:1rem 0;font-size:.9rem;line-height:1.5}
-  </style>
+	<script type="text/javascript">
+		pages = {"applist":{"route":"applist","content":"\n\t<a href=\"alt1\" class=\"listitem listlink\">\n\t\t<b>Alt1 Toolkit<\/b>\n\t\t<br>A bundle of more than 20 tools that overlay your game and read from the game pixels to help you out.\n\t\t<br>Downloaded 985,986 times.\n\t<\/a>\n\t<div style=\"text-align:center;\">\n\t\t<a onclick=\"PageManager.setUrl('alt1');\" class=\"fancybutton\" id=\"applistdownloadbutton\" download=\"\" href=\"\/download.exe?file=alt1squirrel\" data-hoverrgb=\"130,130,130\" style=\"font-size:1.5em;background:radial-gradient(200% 200% at 50% 0%, #444444, #1e1d1c)\">\n\t\t\tDownload Alt1\n\t\t<\/a>\n\t<\/div>\n\n\t<a href=\"player\" class=\"listitem listlink\">\n\t\t<b>Player Profile<\/b>\n\t\t<br>Skill tracking, boss kills, 3d avatar (with VR) and more.\n\t<\/a>\n\t<div style=\"position:relative; height:30px; margin:0px 20px;\">\n\t\t<div style=\"position:absolute; left:0px; height:25px; top:0px; right:38px;\">\n\t\t\t<input id=\"applist-ppinput\" class=\"sliminput\" type=\"text\" style=\"position:absolute; width:100%; height:100%;\" placeholder=\"Username\" autocomplete=\"off\" onkeydown=\"pages['applist'].moduleinst.keydown(event)\">\n\t\t<\/div>\n\t\t<input style=\"position:absolute; top:0px; width:35px; right:0px; height:25px;\" class=\"sliminput\" type=\"button\" value=\">\" onclick=\"pages['applist'].moduleinst.go()\">\n\t<\/div>\n\n\t<a href=\"clue\" class=\"listitem listlink\">\n\t\t<b>Clue Solver<\/b>\n\t\t<br>The solver reads the clues from your scren and instantly solves all puzzles or shows you where to go on the map.\n\t<\/a>\n\n\t<a href=\"map_app\" class=\"listitem listlink\">\n\t\t<b>World Map<\/b>\n\t\t<br>High definition world map with satallite and areal views, also has all teleports on it.\n\t<\/a>\n\t<a href=\"modelviewer\" class=\"listitem listlink\">\n\t\t<b>Model viewer<\/b>\n\t\t<br>Browse the contents of the runescape game files and export the 3d models. Including player avatar customizer.\n\t<\/a>\n\n\t<a href=\"dgkey\" class=\"listitem listlink\">\n\t\t<b>DGKey<\/b>\n\t\t<br>The number one tool for dungeoneering, it reads the map of your screen, shares it with the rest of your team and much more.\n\t<\/a>\n\n\t<a href=\"jadsim_home\" class=\"listitem listlink\">\n\t\t<b>Jad Simulator<\/b>\n\t\t<br>Train your prayer switching skills against Jad, and it even simulates a connection delay.\n\t<\/a>\n\n\t<a href=\"allapps\" class=\"listitem listlink\">\n\t\t<b>More apps<\/b>\n\t\t<br>View the full list of apps.\n\t<\/a>\n\n\t<form action=\"https:\/\/www.paypal.com\/cgi-bin\/webscr\" method=\"post\" target=\"_blank\" style=\"float:right; margin-top:8px;\">\n\t\t<input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">\n\t\t<input type=\"hidden\" name=\"hosted_button_id\" value=\"FJK44XJMURCSW\">\n\t\t<input type=\"image\" style=\"width: 147px; height:47px\" src=\"https:\/\/www.paypalobjects.com\/en_US\/i\/btn\/btn_donateCC_LG.gif\" border=\"0\" name=\"submit\" title=\"PayPal - The safer, easier way to pay online!\" alt=\"Donate with PayPal button\">\n\t\t<img alt=\"\" border=\"0\" style=\"width: 1px;height:1px;\" src=\"https:\/\/www.paypal.com\/en_US\/i\/scr\/pixel.gif\" width=\"1\" height=\"1\">\n\t<\/form>\n\n\n\t<a href=\"donations\" class=\"listitem listlink\">\n\t\t<b>Support RuneApps<\/b><br>\n\t\tRuneApps is free for anyone to use, consider donating to support development.\n\t<\/a>\n\n\n","description":"List of apps on RuneApps.","pagemode":"default","title":"Apps","module":"\n\texports.load = function () {\n\t\tPageManager.registerFancyButton(\"applistdownloadbutton\");\n\t\tPageManager.ppAutoComplete(document.getElementById(\"applist-ppinput\"));\n\t};\n\texports.keydown = function (e) {\n\t\tif (e.keyCode == 13) {\n\t\t\texports.go();\n\t\t}\n\t};\n\texports.go = function () {\n\t\tvar el = document.getElementById(\"applist-ppinput\");\n\t\tvar name = el.value.replace(\/[^\\w\\-\\ ]\/g, \"\");\n\t\tPageManager.setUrl('player\/' + name);\n\t};\n"},"shoutbox":{"route":"shoutbox","content":"\n\t<a href=\"forums\/\" class=\"listitem listlink\">\n\t\t<b>Forums<\/b>\n\t\t<br>Official RuneApps forums. View the latest discussions and developments.\n\t<\/a>\n\t<a href=\"https:\/\/discord.gg\/G3SbcS8\" class=\"listitem listlink\">\n\t\t<b>Discord<\/b>\n\t\t<br>Join our Discord server for some quick tips and help\n\t<\/a>\n\t<span class=\"listitem\" style=\"border:none;\">\n\t\t#website-shoutbox\n\t<\/span>\n\t<div style=\"padding:0px 5% 10px; float:left; width:100%; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box;\">\n\t\t<div id=\"shoutboxcontent\" class=\"sliminput\" style=\"float:left; margin-bottom:3px; height:200px; width:100%; overflow-y:scroll; overflow-x:hidden; font-family:'Microsoft New Tai Lue','Calibri',sans-serif; word-wrap:break-word; padding:0px;\">\n\t\t\tLoading...\n\t\t<\/div>\n\t\t<div id=\"shoutboxfaq\" style=\"width:100%; min-height:100px; float:left; background:#444; margin-bottom:3px; border:1px solid #AAA; box-sizing:border-box; padding:10px; text-align:center; display:flex; align-items:center;\">\n\t\t\t<span>To prevent duplicate questions please read the <a href=\"http:\/\/runeapps.org\/forums\/viewtopic.php?id=140\" target=\"_blank\">FAQ<\/a> before posting questions. Also, please post issues or bugs on the <a href=\"\/forums\/viewforum.php?id=5\" target=\"_blank\">forums<\/a>.<br>\n\t\t\t\t<a href=\"javascript:PageManager.ShoutBox.hidefaq();\">Continue to post<\/a>\n\t\t\t<\/span>\n\t\t<\/div>\n\t\t<textarea id=\"shoutboxinput\" class=\"sliminput\" style=\"display:none; width:100%; height:50px; padding-left:5px; min-height:25px; max-height:100px; font-size:1em; resize:vertical; float:left; margin-bottom:3px; font-family:'Microsoft New Tai Lue','Calibri',sans-serif;\" placeholder=\"Please post issues or bugs on the forums\" onkeydown=\"if(event.keyCode==13){PageManager.ShoutBox.enter(this.parentElement); return false;}\" maxlength=\"320\"><\/textarea>\n\t\t<div id=\"shoutboxnamewrapper\" style=\"display:none; position:relative; float:left; height:25px; width:100%;\">\n\t\t\t<div style=\"position:absolute; left:0px; right:38px; margin:0px; height:25px;\">\n\t\t\t\t<input id=\"shoutboxnick\" class=\"sliminput\" style=\"width:100%; height:100%; padding-left:5px;\" placeholder=\"Nickname\" onkeydown=\"if(event.keyCode==13){PageManager.ShoutBox.enter(this.parentElement.parentElement.parentElement); return false;}\">\n\t\t\t<\/div>\n\t\t\t<input type=\"button\" id=\"shoutboxsubmit\" class=\"sliminput\" style=\"position:absolute; width:35px; right:0px; height:25px;\" value=\">\" onclick=\"PageManager.ShoutBox.enter(this.parentElement.parentElement);\">\n\t\t<\/div>\n\t<\/div>\n","description":"Post your feedback and suggestions here.","pagemode":"default","title":"Community","module":"exports.load=(function(val){\n\tPageManager.ShoutBox.init();\n});"},"modelviewer":{"route":"modelviewer","content":"\n\t<div id=\"rsmv_app\"><\/div>\n","description":"View the models and other data in the RuneScape cache","pagemode":"fixed","title":"RuneApps Cache Tools","thumbnail":"\/contentimgs\/modelviewer\/thumbnail.png","sitename":"RuneApps Model Viewer","stylesheets":["\/apps\/cachetools\/assets\/index.css"],"scripts":["\/apps\/cachetools\/webviewer.js"],"module":"\n\tvar root;\n\texports = {\n\t\tload: function () {\n\t\t\troot = RSMV.start(document.getElementById(\"rsmv_app\"));\n\t\t},\n\t\tunload: function () {\n\t\t\tRSMV.unload(root);\n\t\t}\n\t};\n"}};
+		themes = {"cwapp":{"name":"default","back":"/imgs/back/cwapp.jpg","backcolor":"#2AD","themecolor":"#2AD"},"jadsim":{"name":"jad","back":"/imgs/back/jadsim.jpg","backcolor":"#544","themecolor":"#544"},"dungapp":{"name":"dungeoneering","back":"/imgs/back/dungapp.jpg","backcolor":"#435","themecolor":"#435"},"rscolor":{"name":"colorful","back":"/imgs/back/rscolor.jpg","backcolor":"#DD5","themecolor":"#DD5"},"poptimer":{"name":"Ports","back":"/imgs/back/poptimer.jpg","backcolor":"#79F","themecolor":"#79F"},"playerprofile":{"name":"Taverly","back":"/imgs/back/playerprofile.jpg","backcolor":"#2AD","themecolor":"#2AD"},"droplogger":{"name":"Rise of the Six","back":"/imgs/back/droplogger.jpg","backcolor":"#302","themecolor":"#302"},"grove3":{"name":"The Lost Grove 3","back":"/imgs/back/pp/grove3.jpg","backcolor":"#3476c2","themecolor":"#3476c2"}};
+		currentpage = {"parts":[],"srcfile":"modelviewer"};
+
+		//instantly load cache, do not rely on functions from other pages
+		(function() {
+			if (window.XMLHttpRequest) {
+				var req = new XMLHttpRequest();
+				req.onload = function() {
+					var t = JSON.parse(req.responseText);
+					for (var b in t) {
+						if (!pages[b]) {
+							pages[b] = t[b];
+						}
+					}
+				};
+				req.open("GET", "/content/fullcache.html", true);
+				req.send();
+			}
+		})();
+	</script>
+	<script defer type="text/javascript" src="/apps/homepage/homepage.bundle.js"></script>
 </head>
-<body>
 
-<div id="loading">
-  <svg class="logo" viewBox="0 0 1230.574 519.774" fill="#F78100">
-    <path d="M784.025,512.011l5.872-20.311c6.998-24.169,4.394-46.511-7.349-62.926c-10.801-15.122-28.804-24.022-50.666-25.056l-414.114-5.281c-2.788-0.147-5.096-1.403-6.518-3.471c-1.44-2.123-1.773-4.856-0.886-7.478c1.366-4.08,5.41-7.164,9.62-7.349l417.954-5.299c49.576-2.271,103.252-42.505,122.048-91.564l23.837-62.28c0.657-1.696,0.952-3.493,0.94-5.294c-0.007-0.984-0.078-1.969-0.294-2.94C857.383,91.028,748.758,0,618.863,0c-119.685,0-221.312,77.254-257.76,184.623c-23.523-17.652-53.62-27.031-85.969-23.801c-57.423,5.706-103.565,51.94-109.271,109.363c-1.496,14.901-0.277,29.284,3.158,42.8C75.222,315.718,0,392.566,0,487.029c0,8.549,0.646,16.95,1.846,25.166c0.591,3.988,3.952,6.98
-<!-- Token verified 10/25/2025 23:44:33 -->
+<body data-pagemode="fixed">
+	<noscript style="position:fixed; bottom:10px; left:50%; margin-left:-45%; width:90%; font-size:20px; z-index:100; background:#FFF; padding:5px;">
+		RuneApps relies heavily on JavaScript, you seem to have disabled javascript in your browser settings which means many features will be broken. Visit <a target="_blank" href="http://enable-javascript.com/">enable-javascript.com</a> for more info about javascript.
+	</noscript>
+	<div id="backgrounddiv">
+		<div class="backshuffle current" style="background-image:url('/imgs/back/cwapp.jpg'); background-color:#2AD"></div>
+	</div>
+	<div class="mb-root">
+		<div class="pagepadding mb-padding">
+			<a class="mb-logo" href="/home">
+				<img class="mb-logo__icon" width="64" height="64" src="/apps/alt1/icon.png" />
+				<span class="mb-logo__text">RuneApps.org</span>
+			</a>
+			<div class="mb-menu">
+				<span class='mb-section'>
+<a href='alt1' class='mb-section__header'>Alt1 Toolkit</a>
+<div id='headersub-alt1' class='mb-menu__sub'>
+	<a class='mb-subsection' href='alt1' data-route='alt1'>About</a>
+	<a class='mb-subsection' href='alt1/help' data-route='alt1/help'>Guide</a>
+	<a class='mb-subsection' href='alt1/updates' data-route='alt1/updates'>Updates</a>
+</div>
+</span>
+<span class='mb-section'>
+<a href='clue' class='mb-section__header'>Tools</a>
+<div id='headersub-clue' class='mb-menu__sub'>
+	<a class='mb-subsection' href='clue' data-route='clue'>Clue Solver</a>
+	<a class='mb-subsection' href='jadsim_home' data-route='jadsim_home'>Jad sim</a>
+	<a class='mb-subsection' href='fishflingers' data-route='fishflingers'>Fish Flingers</a>
+	<a class='mb-subsection' href='notifications' data-route='notifications'>D&amp;D tracker</a>
+	<a class='mb-subsection' href='dgkey' data-route='dgkey'>DGKey</a>
+</div>
+</span>
+<span class='mb-section'>
+<a href='player' class='mb-section__header'>Players</a>
+<div id='headersub-player' class='mb-menu__sub'>
+	<a class='mb-subsection' href='player/' data-route='player/*'>Profile</a>
+	<a class='mb-subsection' href='player//graph' data-route='player/*/graph'>Graph</a>
+	<a class='mb-subsection' href='hiscores' data-route='hiscores'>Hiscores</a>
+	<a class='mb-subsection' href='hiscores//info' data-route='hiscores/*/info'>Bosses</a>
+	<a class='mb-subsection' href='player_lookup' data-route='player_lookup'>About</a>
+</div>
+</span>
+<span class='mb-section mb-section--selected'>
+<a href='modelviewer' class='mb-section__header'>Model Viewer</a>
+<div id='headersub-modelviewer' class='mb-menu__sub mb-menu__sub--selected'>
+	<a class='mb-subsection mb-subsection--selected' href='modelviewer' data-route='modelviewer'>Viewer</a>
+	<a class='mb-subsection' href='modelviewer_about' data-route='modelviewer_about'>About</a>
+</div>
+</span>
+			</div>
+		</div>
+	</div>
+	<div class="mb-spacer"></div>
+	<div class="contentbox-app">
+		<div class="contentbox">
+			<div class="contentboxhead">
+				<div class="carbonleft"></div>
+				<div class="carbonmid contenttitle">
+					<div id="maincontenttitle">RuneApps Cache Tools</div>
+				</div>
+				<div class="carbontoal"></div>
+				<div class="almid"></div>
+				<div class="alright">
+					<div id="mainclosebutton" class="closeboxbutton" style="display:block;" onclick="PageManager.closeFocus();"></div>
+				</div>
+			</div>
+			<div id="content-app" class="contentboxinner">
+							</div>
+		</div>
+	</div>
+	<div id="content-noframe" class="contentbox͂ν
