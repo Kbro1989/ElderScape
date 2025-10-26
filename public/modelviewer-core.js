@@ -11,7 +11,6 @@ scene.add(new THREE.AmbientLight(0xffffff, 1));
 
 let currentModelId = null;
 
-// UPDATED: USE CLOUDFLARE PAGES URL
 export async function loadModel(id) {
   currentModelId = id;
   scene.clear();
@@ -27,7 +26,7 @@ export async function loadModel(id) {
   const mesh = new THREE.Mesh(geo, mat);
   scene.add(mesh);
 
-  // Auto-center model
+  // Auto-center
   mesh.geometry.computeBoundingBox();
   const box = mesh.geometry.boundingBox;
   const center = box.getCenter(new THREE.Vector3());
