@@ -11,7 +11,6 @@ export default {
 
       let description = '';
       if (type === 'png') {
-        // Cloudflare AI for vision (free tier)
         const v = await env.AI.run('@cf/llava-1.5-7b-hf', {
           image: { base64 },
           prompt: `Describe RuneScape model ${modelId} in detail.`
@@ -20,22 +19,12 @@ export default {
       }
 
       const wiki = await getWiki(modelId, env);
-      // HF for lore (custom model)
-      const loreRes = await fetch('https://api-inference.huggingface.co/models/NousResearch/Nous-Hermes-2-Mistral-7B-DPO', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer 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',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          inputs: `Write RuneScape-style lore for model ${modelId}: ${description}. Wiki: ${wiki}`,
-          parameters: { max_length: 120, temperature: 0.7 }
-        })
+      const lore = await env.AI.run('@cf/hermes-2-pro-mistral-7b', {
+        prompt: `Write RuneScape‑style lore for model ${modelId}: ${description}. Wiki info: ${wiki}`,
+        max_tokens: 120
       });
-      const lore = await loreRes.json();
-      const loreText = lore[0]?.generated_text || 'Lore error';
 
-      const data = { modelId, description, lore: loreText, wiki, timestamp: Date.now() };
+      const data = { modelId, description, lore: lore.response, wiki, timestamp: Date.now() };
       await env.ELDERSCAPE_KV.put(`model:${modelId}`, JSON.stringify(data), { expirationTtl: 604800 });
       return Response.json(data);
     }
