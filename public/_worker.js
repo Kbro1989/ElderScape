@@ -32,7 +32,7 @@ export default {
   }
 };
 
-async function getWiki(id,AD env) {
+async function getWiki(id, env) {
   const cached = await env.ELDERSCAPE_KV.get(`wiki:${id}`);
   if (cached) return cached;
   const r = await fetch(`https://runescape.wiki/api.php?action=query&prop=extracts&format=json&titles=Model:${id}`);
