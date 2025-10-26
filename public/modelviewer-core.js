@@ -1,74 +1,31 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.module.js';
-import { GLTFExporter } from 'https://cdn.jsdelivr.net/npm/three@0.159.0/examples/jsm/exporters/GLTFExporter.js';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ElderScape | RuneScape 3D Viewer</title>
 
-const canvas = document.getElementById('canvas');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-renderer.setSize(512, 512);
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-camera.position.z = 5;
-scene.add(new THREE.AmbientLight(0xffffff, 1));
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{font-family:-apple-system,system-ui,sans-serif;background:#0a0a0a;color:#d9d9d9}
+    #loading{position:fixed;inset:0;background:#0a0a0a;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;transition:opacity .3s}
+    #loading.hide{opacity:0;pointer-events:none}
+    .logo{width:100px;margin-bottom:1rem}
+    .spinner{width:32px;height:32px;position:relative}
+    .spinner div{position:absolute;width:100%;height:100%;border:3px solid #92979b;border-radius:50%;border-color:#92979b transparent transparent transparent;animation:s 2.5s cubic-bezier(.5,0,.5,1) infinite}
+    .spinner div:nth-child(1){animation-delay:-.45s}
+    .spinner div:nth-child(2){animation-delay:-.3s}
+    .spinner div:nth-child(3){animation-delay:-.15s}
+    @keyframes s{to{transform:rotate(360deg)}}
+    #app{padding:2rem;text-align:center;max-width:800px;margin:auto}
+    canvas{width:100%;max-width:512px;border:1px solid #444;border-radius:8px;background:#111}
+    button{background:#F78100;color:#fff;border:none;padding:12px 24px;font-size:1rem;border-radius:6px;cursor:pointer;margin:1rem}
+    button:hover{background:#e06a00}
+    .status{margin:1rem 0;font-size:.9rem;line-height:1.5}
+  </style>
+</head>
+<body>
 
-let currentModelId = null;
-
-export async function loadModel(id) {
-  currentModelId = id;
-  scene.clear();
-  const res = await fetch(`https://rs3-ai-api.pages.dev/${id}.json`);
-  if (!res.ok) throw new Error(`Model ${id} not found`);
-  const d = await res.json();
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.Float32BufferAttribute(d.vertices.flat(), 3));
-  const mat = new THREE.MeshStandardMaterial({
-    color: new THREE.Color(...d.color.map(c => c / 255)),
-    transparent: d.alphamode !== 'opaque'
-  });
-  const mesh = new THREE.Mesh(geo, mat);
-  scene.add(mesh);
-
-  // Auto-center
-  mesh.geometry.computeBoundingBox();
-  const box = mesh.geometry.boundingBox;
-  const center = box.getCenter(new THREE.Vector3());
-  mesh.position.sub(center);
-  mesh.position.y -= (box.max.y - box.min.y) * 0.5;
-
-  renderer.render(scene, camera);
-  return d;
-}
-
-export async function exportAsset(type = 'png') {
-  let blob;
-  if (type === 'gltf') {
-    const exp = new GLTFExporter();
-    blob = await new Promise(r => exp.parse(scene, gltf => r(new Blob([JSON.stringify(gltf)], { type: 'model/gltf+json' })), { binary: false }));
-  } else {
-    blob = dataURLtoBlob(renderer.domElement.toDataURL('image/png'));
-  }
-  const form = new FormData();
-  form.append('file', blob, `model_${currentModelId}.${type}`);
-  form.append('modelId', currentModelId);
-  form.append('type', type);
-  const r = await fetch('/api/export', { method: 'POST', body: form });
-  return r.json();
-}
-
-function dataURLtoBlob(url) {
-  const [h, b] = url.split(',');
-  const bin = atob(b);
-  const arr = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
-  return new Blob([arr], { type: h.match(/:(.*?);/)[1] });
-}
-
-export async function batchExport(ids, types = ['png']) {
-  const out = [];
-  for (const id of ids) {
-    try {
-      await loadModel(id);
-      for (const t of types) out.push(await exportAsset(t));
-    } catch (e) { console.warn(e); }
-    scene.clear();
-  }
-  return out;
-}
+<div id="loading">
+  <svg class="logo" viewBox="0 0 1230.574 519.774" fill="#F78100">
+    <path d="M784.025,512.011l5.872
