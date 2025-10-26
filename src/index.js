@@ -1,43 +1,319 @@
-export default {
-  async fetch(req, env) {
-    const url = new URL(req.url);
-    if (req.method === 'POST' && url.pathname === '/api/export') {
-      const form = await req.formData();
-      const file = form.get('file');
-      const modelId = form.get('modelId');
-      const type = form.get('type');
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://a9.com/-/spec/opensearch/1.1/">
+	<base href="/" />
+	<title>RuneApps Cache Tools – ElderScape Edition</title>
+	<link rel="search" href="/search_pp.xml" type="application/opensearchdescription+xml" title="Runeapps PlayerProfile" />
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+	<meta property='og:image' content='https://runeapps.org/contentimgs/modelviewer/thumbnail.png'/>
+	<meta property='og:title' content='RuneApps Cache Tools – ElderScape'>
+	<meta property='og:description' content='View RuneScape models with AI lore generation'>
+	<meta property='og:site_name' content='ElderScape Model Viewer'>
+	<meta property='og:type' content='website' />
+	<meta name='twitter:site' content='@SkillbertII' />
+	<meta name='twitter:creator' content='@SkillbertII' />
+	<link rel='stylesheet' href='/apps/cachetools/assets/index.css'/>
+	<meta name="google-site-verification" content="QKYaPWXiQSTuN8tdGWJnYd3wQzqqt6CN3BPyoAHzaAk" />
+	<link rel="stylesheet" type="text/css" href="/apps/homepage/runeappslib.css" />
+	<link rel="stylesheet" type="text/css" href="/apps/homepage/contentstyle.css" />
+	<link rel="stylesheet" type="text/css" href="/apps/homepage/style.css" />
+	<link rel="stylesheet" type="text/css" href="/apps/homepage/darkmode.css" />
 
-      const base64 = type === 'png' ? Buffer.from(await file.arrayBuffer()).toString('base64') : null;
+	<script type="text/javascript">
+		pages = {"applist":{"route":"applist","content":"\n\t<a href=\"alt1\" class=\"listitem listlink\">\n\t\t<b>Alt1 Toolkit<\/b>\n\t\t<br>A bundle of more than 20 tools that overlay your game and read from the game pixels to help you out.\n\t\t<br>Downloaded 985,986 times.\n\t<\/a>\n\t<div style=\"text-align:center;\">\n\t\t<a onclick=\"PageManager.setUrl('alt1');\" class=\"fancybutton\" id=\"applistdownloadbutton\" download=\"\" href=\"\/download.exe?file=alt1squirrel\" data-hoverrgb=\"130,130,130\" style=\"font-size:1.5em;background:radial-gradient(200% 200% at 50% 0%, #444444, #1e1d1c)\">\n\t\t\tDownload Alt1\n\t\t<\/a>\n\t<\/div>\n\n\t<a href=\"player\" class=\"listitem listlink\">\n\t\t<b>Player Profile<\/b>\n\t\t<br>Skill tracking, boss kills, 3d avatar (with VR) and more.\n\t<\/a>\n\t<div style=\"position:relative; height:30px; margin:0px 20px;\">\n\t\t<div style=\"position:absolute; left:0px; height:25px; top:0px; right:38px;\">\n\t\t\t<input id=\"applist-ppinput\" class=\"sliminput\" type=\"text\" style=\"position:absolute; width:100%; height:100%;\" placeholder=\"Username\" autocomplete=\"off\" onkeydown=\"pages['applist'].moduleinst.keydown(event)\">\n\t\t<\/div>\n\t\t<input style=\"position:absolute; top:0px; width:35px; right:0px; height:25px;\" class=\"sliminput\" type=\"button\" value=\">\" onclick=\"pages['applist'].moduleinst.go()\">\n\t<\/div>\n\n\t<a href=\"clue\" class=\"listitem listlink\">\n\t\t<b>Clue Solver<\/b>\n\t\t<br>The solver reads the clues from your scren and instantly solves all puzzles or shows you where to go on the map.\n\t<\/a>\n\n\t<a href=\"map_app\" class=\"listitem listlink\">\n\t\t<b>World Map<\/b>\n\t\t<br>High definition world map with satallite and areal views, also has all teleports on it.\n\t<\/a>\n\t<a href=\"modelviewer\" class=\"listitem listlink\">\n\t\t<b>Model viewer<\/b>\n\t\t<br>Browse the contents of the runescape game files and export the 3d models. Including player avatar customizer.\n\t<\/a>\n\n\t<a href=\"dgkey\" class=\"listitem listlink\">\n\t\t<b>DGKey<\/b>\n\t\t<br>The number one tool for dungeoneering, it reads the map of your screen, shares it with the rest of your team and much more.\n\t<\/a>\n\n\t<a href=\"jadsim_home\" class=\"listitem listlink\">\n\t\t<b>Jad Simulator<\/b>\n\t\t<br>Train your prayer switching skills against Jad, and it even simulates a connection delay.\n\t<\/a>\n\n\t<a href=\"allapps\" class=\"listitem listlink\">\n\t\t<b>More apps<\/b>\n\t\t<br>View the full list of apps.\n\t<\/a>\n\n\t<form action=\"https:\/\/www.paypal.com\/cgi-bin\/webscr\" method=\"post\" target=\"_blank\" style=\"float:right; margin-top:8px;\">\n\t\t<input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">\n\t\t<input type=\"hidden\" name=\"hosted_button_id\" value=\"FJK44XJMURCSW\">\n\t\t<input type=\"image\" style=\"width: 147px; height:47px\" src=\"https:\/\/www.paypalobjects.com\/en_US\/i\/btn\/btn_donateCC_LG.gif\" border=\"0\" name=\"submit\" title=\"PayPal - The safer, easier way to pay online!\" alt=\"Donate with PayPal button\">\n\t\t<img alt=\"\" border=\"0\" style=\"width: 1px;height:1px;\" src=\"https:\/\/www.paypal.com\/en_US\/i\/scr\/pixel.gif\" width=\"1\" height=\"1\">\n\t<\/form>\n\n\n\t<a href=\"donations\" class=\"listitem listlink\">\n\t\t<b>Support RuneApps<\/b><br>\n\t\tRuneApps is free for anyone to use, consider donating to support development.\n\t<\/a>\n\n\n","description":"List of apps on RuneApps.","pagemode":"default","title":"Apps","module":"\n\texports.load = function () {\n\t\tPageManager.registerFancyButton(\"applistdownloadbutton\");\n\t\tPageManager.ppAutoComplete(document.getElementById(\"applist-ppinput\"));\n\t};\n\texports.keydown = function (e) {\n\t\tif (e.keyCode == 13) {\n\t\t\texports.go();\n\t\t}\n\t};\n\texports.go = function () {\n\t\tvar el = document.getElementById(\"applist-ppinput\");\n\t\tvar name = el.value.replace(\/[^\\w\\-\\ ]\/g, \"\");\n\t\tPageManager.setUrl('player\/' + name);\n\t};\n"},"shoutbox":{"route":"shoutbox","content":"\n\t<a href=\"forums\/\" class=\"listitem listlink\">\n\t\t<b>Forums<\/b>\n\t\t<br>Official RuneApps forums. View the latest discussions and developments.\n\t<\/a>\n\t<a href=\"https:\/\/discord.gg\/G3SbcS8\" class=\"listitem listlink\">\n\t\t<b>Discord<\/b>\n\t\t<br>Join our Discord server for some quick tips and help\n\t<\/a>\n\t<span class=\"listitem\" style=\"border:none;\">\n\t\t#website-shoutbox\n\t<\/span>\n\t<div style=\"padding:0px 5% 10px; float:left; width:100%; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box;\">\n\t\t<div id=\"shoutboxcontent\" class=\"sliminput\" style=\"float:left; margin-bottom:3px; height:200px; width:100%; overflow-y:scroll; overflow-x:hidden; font-family:'Microsoft New Tai Lue','Calibri',sans-serif; word-wrap:break-word; padding:0px;\">\n\t\t\tLoading...\n\t\t<\/div>\n\t\t<div id=\"shoutboxfaq\" style=\"width:100%; min-height:100px; float:left; background:#444; margin-bottom:3px; border:1px solid #AAA; box-sizing:border-box; padding:10px; text-align:center; display:flex; align-items:center;\">\n\t\t\t<span>To prevent duplicate questions please read the <a href=\"http:\/\/runeapps.org\/forums\/viewtopic.php?id=140\" target=\"_blank\">FAQ<\/a> before posting questions. Also, please post issues or bugs on the <a href=\"\/forums\/viewforum.php?id=5\" target=\"_blank\">forums<\/a>.<br>\n\t\t\t\t<a href=\"javascript:PageManager.ShoutBox.hidefaq();\">Continue to post<\/a>\n\t\t\t<\/span>\n\t\t<\/div>\n\t\t<textarea id=\"shoutboxinput\" class=\"sliminput\" style=\"display:none; width:100%; height:50px; padding-left:5px; min-height:25px; max-height:100px; font-size:1em; resize:vertical; float:left; margin-bottom:3px; font-family:'Microsoft New Tai Lue','Calibri',sans-serif;\" placeholder=\"Please post issues or bugs on the forums\" onkeydown=\"if(event.keyCode==13){PageManager.ShoutBox.enter(this.parentElement); return false;}\" maxlength=\"320\"><\/textarea>\n\t\t<div id=\"shoutboxnamewrapper\" style=\"display:none; position:relative; float:left; height:25px; width:100%;\">\n\t\t\t<div style=\"position:absolute; left:0px; right:38px; margin:0px; height:25px;\">\n\t\t\t\t<input id=\"shoutboxnick\" class=\"sliminput\" style=\"width:100%; height:100%; padding-left:5px;\" placeholder=\"Nickname\" onkeydown=\"if(event.keyCode==13){PageManager.ShoutBox.enter(this.parentElement.parentElement.parentElement); return false;}\">\n\t\t\t<\/div>\n\t\t\t<input type=\"button\" id=\"shoutboxsubmit\" class=\"sliminput\" style=\"position:absolute; width:35px; right:0px; height:25px;\" value=\">\" onclick=\"PageManager.ShoutBox.enter(this.parentElement.parentElement);\">\n\t\t<\/div>\n\t<\/div>\n","description":"Post your feedback and suggestions here.","pagemode":"default","title":"Community","module":"exports.load=(function(val){\n\tPageManager.ShoutBox.init();\n});"},"modelviewer":{"route":"modelviewer","content":"\n\t<div id=\"rsmv_app\"><\/div>\n","description":"View the models and other data in the RuneScape cache","pagemode":"fixed","title":"RuneApps Cache Tools","thumbnail":"\/contentimgs\/modelviewer\/thumbnail.png","sitename":"RuneApps Model Viewer","stylesheets":["\/apps\/cachetools\/assets\/index.css"],"scripts":["\/apps\/cachetools\/webviewer.js"],"module":"\n\tvar root;\n\texports = {\n\t\tload: function () {\n\t\t\troot = RSMV.start(document.getElementById(\"rsmv_app\"));\n\t\t},\n\t\tunload: function () {\n\t\t\tRSMV.unload(root);\n\t\t}\n\t};\n"}};
+		themes = {"cwapp":{"name":"default","back":"/imgs/back/cwapp.jpg","backcolor":"#2AD","themecolor":"#2AD"},"jadsim":{"name":"jad","back":"/imgs/back/jadsim.jpg","backcolor":"#544","themecolor":"#544"},"dungapp":{"name":"dungeoneering","back":"/imgs/back/dungapp.jpg","backcolor":"#435","themecolor":"#435"},"rscolor":{"name":"colorful","back":"/imgs/back/rscolor.jpg","backcolor":"#DD5","themecolor":"#DD5"},"poptimer":{"name":"Ports","back":"/imgs/back/poptimer.jpg","backcolor":"#79F","themecolor":"#79F"},"playerprofile":{"name":"Taverly","back":"/imgs/back/playerprofile.jpg","backcolor":"#2AD","themecolor":"#2AD"},"droplogger":{"name":"Rise of the Six","back":"/imgs/back/droplogger.jpg","backcolor":"#302","themecolor":"#302"},"grove3":{"name":"The Lost Grove 3","back":"/imgs/back/pp/grove3.jpg","backcolor":"#3476c2","themecolor":"#3476c2"}};
+		currentpage = {"parts":[],"srcfile":"modelviewer"};
 
-      let description = '';
-      if (type === 'png') {
-        const v = await env.AI.run('@cf/llama-3.2-11b-vision-instruct', {
-          image: { base64 },
-          prompt: `Describe RuneScape model ${modelId} in detail.`
-        });
-        description = v.response;
-      }
+		//instantly load cache, do not rely on functions from other pages
+		(function() {
+			if (window.XMLHttpRequest) {
+				var req = new XMLHttpRequest();
+				req.onload = function() {
+					var t = JSON.parse(req.responseText);
+					for (var b in t) {
+						if (!pages[b]) {
+							pages[b] = t[b];
+						}
+					}
+				};
+				req.open("GET", "/content/fullcache.html", true);
+				req.send();
+			}
+		})();
+	</script>
+	<script defer type="text/javascript" src="/apps/homepage/homepage.bundle.js"></script>
+</head>
 
-      const wiki = await getWiki(modelId, env);
-      const lore = await env.AI.run('@cf/llama-3.1-8b-instruct', {
-        prompt: `Write RuneScape‑style lore for model ${modelId}: ${description}. Wiki info: ${wiki}`,
-        max_tokens: 120
-      });
+<body data-pagemode="fixed">
+	<noscript style="position:fixed; bottom:10px; left:50%; margin-left:-45%; width:90%; font-size:20px; z-index:100; background:#FFF; padding:5px;">
+		RuneApps relies heavily on JavaScript, you seem to have disabled javascript in your browser settings which means many features will be broken. Visit <a target="_blank" href="http://enable-javascript.com/">enable-javascript.com</a> for more info about javascript.
+	</noscript>
+	<div id="backgrounddiv">
+		<div class="backshuffle current" style="background-image:url('/imgs/back/cwapp.jpg'); background-color:#2AD"></div>
+	</div>
+	<div class="mb-root">
+		<div class="pagepadding mb-padding">
+			<a class="mb-logo" href="/home">
+				<img class="mb-logo__icon" width="64" height="64" src="/apps/alt1/icon.png" />
+				<span class="mb-logo__text">RuneApps.org</span>
+			</a>
+			<div class="mb-menu">
+				<span class='mb-section'>
+<a href='alt1' class='mb-section__header'>Alt1 Toolkit</a>
+<div id='headersub-alt1' class='mb-menu__sub'>
+	<a class='mb-subsection' href='alt1' data-route='alt1'>About</a>
+	<a class='mb-subsection' href='alt1/help' data-route='alt1/help'>Guide</a>
+	<a class='mb-subsection' href='alt1/updates' data-route='alt1/updates'>Updates</a>
+</div>
+</span>
+<span class='mb-section'>
+<a href='clue' class='mb-section__header'>Tools</a>
+<div id='headersub-clue' class='mb-menu__sub'>
+	<a class='mb-subsection' href='clue' data-route='clue'>Clue Solver</a>
+	<a class='mb-subsection' href='jadsim_home' data-route='jadsim_home'>Jad sim</a>
+	<a class='mb-subsection' href='fishflingers' data-route='fishflingers'>Fish Flingers</a>
+	<a class='mb-subsection' href='notifications' data-route='notifications'>D&amp;D tracker</a>
+	<a class='mb-subsection' href='dgkey' data-route='dgkey'>DGKey</a>
+</div>
+</span>
+<span class='mb-section'>
+<a href='player' class='mb-section__header'>Players</a>
+<div id='headersub-player' class='mb-menu__sub'>
+	<a class='mb-subsection' href='player/' data-route='player/*'>Profile</a>
+	<a class='mb-subsection' href='player//graph' data-route='player/*/graph'>Graph</a>
+	<a class='mb-subsection' href='hiscores' data-route='hiscores'>Hiscores</a>
+	<a class='mb-subsection' href='hiscores//info' data-route='hiscores/*/info'>Bosses</a>
+	<a class='mb-subsection' href='player_lookup' data-route='player_lookup'>About</a>
+</div>
+</span>
+<span class='mb-section mb-section--selected'>
+<a href='modelviewer' class='mb-section__header'>Model Viewer</a>
+<div id='headersub-modelviewer' class='mb-menu__sub mb-menu__sub--selected'>
+	<a class='mb-subsection mb-subsection--selected' href='modelviewer' data-route='modelviewer'>Viewer</a>
+	<a class='mb-subsection' href='modelviewer_about' data-route='modelviewer_about'>About</a>
+</div>
+</span>
+			</div>
+		</div>
+	</div>
+	<div class="mb-spacer"></div>
+	<div class="contentbox-app">
+		<div class="contentbox">
+			<div class="contentboxhead">
+				<div class="carbonleft"></div>
+				<div class="carbonmid contenttitle">
+					<div id="maincontenttitle">RuneApps Cache Tools</div>
+				</div>
+				<div class="carbontoal"></div>
+				<div class="almid"></div>
+				<div class="alright">
+					<div id="mainclosebutton" class="closeboxbutton" style="display:block;" onclick="PageManager.closeFocus();"></div>
+				</div>
+			</div>
+			<div id="content-app" class="contentboxinner">
+							</div>
+		</div>
+	</div>
+	<div id="content/jshttp" class="contentbox\nonumber">
+			</div>
+	<div id="content-fixed" class="contentbox-fixed">
+		
+	<div id="rsmv_app"></div>
+	</div>
+	<div class="pagepadding contentbox-default">
+		<div id="column1" class="contentcolumn">
+			<div class="contentbox">
+				<div class="contentboxhead">
+					<div class="carbonleft"></div>
+					<div class="carbonmid contenttitle">
+						<div>Apps</div>
+					</div>
+					<div class="carbontoal"></div>
+					<div class="almid"></div>
+					<div class="alright"></div>
+				</div>
+				<div class="contentboxinner">
+					
+	<a href="alt1" class="listitem listlink">
+		<b>Alt1 Toolkit</b>
+		<br>A bundle of more than 20 tools that overlay your game and read from the game pixels to help you out.
+		<br>Downloaded 985,986 times.
+	</a>
+	<div style="text-align:center;">
+		<a onclick="PageManager.setUrl('alt1');" class="fancybutton" id="applistdownloadbutton" download="" href="/download.exe?file=alt1squirrel" data-hoverrgb="130,130,130" style="font-size:1.5em;background:radial-gradient(200% 200% at 50% 0%, #444444, #1e1d1c)">
+			Download Alt1
+		</a>
+	</div>
 
-      const data = { modelId, description, lore: lore.response, wiki, timestamp: Date.now() };
-      await env.ELDERSCAPE_KV.put(`model:${modelId}`, JSON.stringify(data), { expirationTtl: 604800 });
-      return Response.json(data);
-    }
-    return new Response('Not Found', { status: 404 });
-  }
-};
+	<a href="player" class="listitem listlink">
+		<b>Player Profile</b>
+		<br>Skill tracking, boss kills, 3d avatar (with VR) and more.
+	</a>
+	<div style="position:relative; height:30px; margin:0px 20px;">
+		<div style="position:absolute; left:0px; height:25px; top:0px; right:38px;">
+			<input id="applist-ppinput" class="sliminput" type="text" style="position:absolute; width:100%; height:100%;" placeholder="Username" autocomplete="off" onkeydown="pages['applist'].moduleinst.keydown(event)">
+		</div>
+		<input style="position:absolute; top:0px; width:35px; right:0px; height:25px;" class="sliminput" type="button" value=">" onclick="pages['applist'].moduleinst.go()">
+	</div>
 
-async function getWiki(id, env) {
-  const cached = await env.ELDERSCAPE_KV.get(`wiki:${id}`);
-  if (cached) return cached;
-  const r = await fetch(`https://runescape.wiki/api.php?action=query&prop=extracts&format=json&titles=Model:${id}`);
-  const j = await r.json();
-  const extract = Object.values(j.query.pages)[0]?.extract || 'No info';
-  await env.ELDERSCAPE_KV.put(`wiki:${id}`, extract);
-  return extract;
-}
+	<a href="clue" class="listitem listlink">
+		<b>Clue Solver</b>
+		<br>The solver reads the clues from your scren and instantly solves all puzzles or shows you where to go on the map.
+	</a>
+
+	<a href="map_app" class="listitem listlink">
+		<b>World Map</b>
+		<br>High definition world map with satallite and areal views, also has all teleports on it.
+	</a>
+	<a href="modelviewer" class="listitem listlink">
+		<b>Model viewer</b>
+		<br>Browse the contents of the runescape game files and export the 3d models. Including player avatar customizer.
+	</a>
+
+	<a href="dgkey" class="listitem listlink">
+		<b>DGKey</b>
+		<br>The number one tool for dungeoneering, it reads the map of your screen, shares it with the rest of your team and much more.
+	</a>
+
+	<a href="jadsim_home" class="listitem listlink">
+		<b>Jad Simulator</b>
+		<br>Train your prayer switching skills against Jad, and it even simulates a connection delay.
+	</a>
+
+	<a href="allapps" class="listitem listlink">
+		<b>More apps</b>
+		<br>View the full list of apps.
+	</a>
+
+	<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="float:right; margin-top:8px;">
+		<input type="hidden" name="cmd" value="_s-xclick">
+		<input type="hidden" name="hosted_button_id" value="FJK44XJMURCSW">
+		<input type="image" style="width: 147px; height:47px" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button">
+		<img alt="" border="0" style="width: 1px;height:1px;" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+	</form>
+
+
+	<a href="donations" class="listitem listlink">
+		<b>Support RuneApps</b><br>
+		RuneApps is free for anyone to use, consider donating to support development.
+	</a>
+
+
+				</div>
+			</div>
+			<div class="contentbox">
+				<div class="contentboxhead">
+					<div class="carbonleft"></div>
+					<div class="carbonmid contenttitle">
+						<div>Community</div>
+					</div>
+					<div class="carbontoal"></div>
+					<div class="almid"></div>
+					<div class="alright"></div>
+				</div>
+				<div class="contentboxinner">
+					
+	<a href="forums/" class="listitem listlink">
+		<b>Forums</b>
+		<br>Official RuneApps forums. View the latest discussions and developments.
+	</a>
+	<a href="https://discord.gg/G3SbcS8" class="listitem listlink">
+		<b>Discord</b>
+		<br>Join our Discord server for some quick tips and help
+	</a>
+	<span class="listitem" style="border:none;">
+		#website-shoutbox
+	</span>
+	<div style="padding:0px 5% 10px; float:left; width:100%; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box;">
+		<div id="shoutboxcontent" class="sliminput" style="float:left; margin-bottom:3px; height:200px; width:100%; overflow-y:scroll; overflow-x:hidden; font-family:'Microsoft New Tai Lue','Calibri',sans-serif; word-wrap:break-word; padding:0px;">
+			Loading...
+		</div>
+		<div id="shoutboxfaq" style="width:100%; min-height:100px; float:left; background:#444; margin-bottom:3px; border:1px solid #AAA; box-sizing:border-box; padding:10px; text-align:center; display:flex; align-items:center;">
+			<span>To prevent duplicate questions please read the <a href="http://runeapps.org/forums/viewtopic.php?id=140" target="_blank">FAQ</a> before posting questions. Also, please post issues or bugs on the <a href="/forums/viewforum.php?id=5" target="_blank">forums</a>.<br>
+				<a href="javascript:PageManager.ShoutBox.hidefaq();">Continue to post</a>
+			</span>
+		</div>
+		<textarea id="shoutboxinput" class="sliminput" style="display:none; width:100%; height:50px; padding-left:5px; min-height:25px; max-height:100px; font-size:1em; resize:vertical; float:left; margin-bottom:3px; font-family:'Microsoft New Tai Lue','Calibri',sans-serif;" placeholder="Please post issues or bugs on the forums" onkeydown="if(event.keyCode==13){PageManager.ShoutBox.enter(this.parentElement); return false;}" maxlength="320"></textarea>
+		<div id="shoutboxnamewrapper" style="display:none; position:relative; float:left; height:25px; width:100%;">
+			<div style="position:absolute; left:0px; right:38px; margin:0px; height:25px;">
+				<input id="shoutboxnick" class="sliminput" style="width:100%; height:100%; padding-left:5px;" placeholder="Nickname" onkeydown="if(event.keyCode==13){PageManager.ShoutBox.enter(this.parentElement.parentElement.parentElement); return false;}">
+			</div>
+			<input type="button" id="shoutboxsubmit" class="sliminput" style="position:absolute; width:35px; right:0px; height:25px;" value=">" onclick="PageManager.ShoutBox.enter(this.parentElement.parentElement);">
+		</div>
+	</div>
+				</div>
+			</div>
+		</div>
+		<div id="column2" class="contentcolumn">
+			<div id="maincontent" class="contentbox">
+
+				<div class="contentboxhead">
+					<div class="carbonleft"></div>
+					<div class="carbonmid contenttitle">
+						<div></div>
+					</div>
+					<div class="carbontoal"></div>
+					<div class="almid"></div>
+					<div class="alright"></div>
+				</div>
+
+				<div id="content-default" class="contentboxinner">
+									</div>
+			</div>
+			<div id="adbox">
+				<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+				<!-- Banner onder2 -->
+				<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-6871392551538080" data-ad-slot="8146705859"></ins>
+				<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+				</script>
+			</div>
+		</div>
+	</div>
+	<script id="onloadcompile" type="text/javascript">
+		window.addEventListener("DOMContentLoaded", function() {
+			pages["applist"].moduleinst=(function(exports){
+
+	exports.load = function () {
+		PageManager.registerFancyButton("applistdownloadbutton");
+		PageManager.ppAutoComplete(document.getElementById("applist-ppinput"));
+	};
+	exports.keydown = function (e) {
+		if (e.keyCode == 13) {
+			exports.go();
+		}
+	};
+	exports.go = function () {
+		var el = document.getElementById("applist-ppinput");
+		var name = el.value.replace(/[^\w\-\ ]/g, "");
+		PageManager.setUrl('player/' + name);
+	};
+
+return exports;})({});
+pages["applist"].moduleinst.load && pages["applist"].moduleinst.load(PageManager.getCurrentPageAddress())
+pages["shoutbox"].moduleinst=(function(exports){
+exports.load=(function(val){
+	PageManager.ShoutBox.init();
+});
+return exports;})({});
+pages["shoutbox"].moduleinst.load && pages["shoutbox"].moduleinst.load(PageManager.getCurrentPageAddress())
+pages["modelviewer"].moduleinst=(function(exports){
+
+	var root;
+	exports = {
+		load: function () {
+			root = RSMV.start(document.getElementById("rsmv_app"));
+		},
+		unload: function () {
+			RSMV.unload(root);
+		}
+	};
+
+return exports;})({});
+pages["modelviewer"].moduleinst.load && pages["modelviewer"].moduleinst.load(PageManager.getCurrentPageAddress())
+		});
+	</script>
+</body>
+
+</html>
